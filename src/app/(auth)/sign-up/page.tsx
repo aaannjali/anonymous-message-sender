@@ -109,10 +109,10 @@ export default function SignUpForm() {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <h1 className="text-4xl font-extrabold tracking-tight text-purple-800 dark:text-purple-300 lg:text-5xl mb-6">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 lg:text-5xl mb-6">
             Join Anonymous Feedback
           </h1>
-          <p className="mb-4 text-gray-600 dark:text-gray-300">Sign up to start your anonymous adventure</p>
+          <p className="mb-4 text-gray-600 dark:text-gray-600">Sign up to start your anonymous adventure</p>
         </motion.div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -121,7 +121,7 @@ export default function SignUpForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-purple-700 dark:text-purple-300">Username</FormLabel>
+                  <FormLabel className="text-gray-900">Username</FormLabel>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500" size={18} />
                     <Input
@@ -133,7 +133,7 @@ export default function SignUpForm() {
                       className="pl-10 border-purple-300 focus:border-purple-500 focus:ring-purple-500"
                     />
                   </div>
-                  {isCheckingUsername && <Loader2 className="animate-spin mt-2 text-purple-500" />}
+                  {isCheckingUsername && <Loader2 className="animate-spin mt-2 text-gray-900" />}
                   {!isCheckingUsername && usernameMessage && (
                     <p className={`text-sm mt-2 ${usernameMessage === 'Username is unique' ? 'text-green-500' : 'text-red-500'}`}>
                       {usernameMessage}
@@ -148,12 +148,12 @@ export default function SignUpForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-purple-700 dark:text-purple-300">Email</FormLabel>
+                  <FormLabel className="text-gray-900">Email</FormLabel>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500" size={18} />
                     <Input {...field} className="pl-10 border-purple-300 focus:border-purple-500 focus:ring-purple-500" />
                   </div>
-                  <p className="text-sm text-gray-400 mt-1">We`ll send you a verification code</p>
+                  <p className="text-sm text-gray-700 mt-1">We`ll send you a verification code</p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -163,7 +163,7 @@ export default function SignUpForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-purple-700 dark:text-purple-300">Password</FormLabel>
+                  <FormLabel className="text-gray-900 dark:text-purple-300">Password</FormLabel>
                   <div className="relative">
                     <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500" size={18} />
                     <Input type="password" {...field} className="pl-10 border-purple-300 focus:border-purple-500 focus:ring-purple-500" />
