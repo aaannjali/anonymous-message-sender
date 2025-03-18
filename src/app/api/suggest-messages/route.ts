@@ -6,6 +6,8 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export const runtime = "edge";
 
 export async function POST(req: Request) {
+  console.log(req);
+  
   try {
     const prompt = `Create a list of three open-ended and engaging questions formatted as a single string. 
     Each question should be separated by '||'. These questions are for an anonymous social messaging platform, 

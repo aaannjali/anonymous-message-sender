@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
                     return user;
             
                 } catch (error) {
-                    console.error("❌ Authorization Error:");
+                    console.error("❌ Authorization Error:", error);
                     throw new Error('Invalid credentials');
                 }
             }

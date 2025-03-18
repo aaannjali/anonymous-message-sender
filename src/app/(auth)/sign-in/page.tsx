@@ -3,13 +3,10 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useDebounceValue } from 'usehooks-ts'
+
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { signUpSchema } from "@/schemas/signUpSchema"
-import axios, {AxiosError} from 'axios'
-import { ApiResponse } from "@/types/ApiResponse"
+
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"

@@ -3,17 +3,16 @@
 import { verifySchema } from '@/schemas/verifySchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from "sonner"
 import * as z from "zod"
 import axios, { AxiosError } from 'axios'
 import { ApiResponse } from '@/types/ApiResponse'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
-import { CheckCircle, Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion';
+
 
 
 const VerifyAccount = () => {

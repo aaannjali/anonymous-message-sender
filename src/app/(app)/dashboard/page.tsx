@@ -9,13 +9,13 @@ import { Message } from '@/model/User';
 import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
-import { Loader2, RefreshCcw, Copy, User, MessageSquare } from 'lucide-react';
+import { Loader2, RefreshCcw } from 'lucide-react';
 import { User as NextAuthUser } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
-import { motion } from 'framer-motion';
+
 
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
