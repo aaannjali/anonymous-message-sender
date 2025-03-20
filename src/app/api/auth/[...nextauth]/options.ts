@@ -1,72 +1,55 @@
-import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
+import { NextAuthOptions, User } from "next-auth";
 import UserModel from "@/model/User";
-
-
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
+            name: "Credentials",
             id: "credentials",
-            name: "credentials",
             credentials: {
-                email: { label: "Email", type: "text" },
+                identifier: { label: "Username or Email", type: "text", placeholder: "ShardenduMishra22" },  // Changed 'email' to 'identifier'
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials: any): Promise<any> {
-                
+            async authorize(credentials) {
                 await dbConnect();
-            
-                console.log("🟡 Received Credentials:", credentials);
-            
                 try {
+                    // Check if credentials.identifier is email or username
                     const user = await UserModel.findOne({
                         $or: [
-                            { email: credentials.identifier },  // ✅ Ensure this matches frontend
-                            { username: credentials.identifier }
+                            { email: credentials?.identifier },   // Explicitly check for email
+                            { username: credentials?.identifier }  // Explicitly check for username
                         ]
                     });
-            
-                    console.log("🟢 Found User:", user);
-            
                     if (!user) {
-                        console.error("❌ No user found with this email/username");
-                        throw new Error('No user found with this email');
+                        throw new Error("User not found");
                     }
-            
                     if (!user.isVerified) {
-                        console.error("❌ User is not verified");
-                        throw new Error('Please verify your account before login');
+                        throw new Error("User not verified");
                     }
-            
-                    const isPassword = await bcrypt.compare(credentials.password, user.password);
-                    console.log("🔍 Password Match:", isPassword);
-            
-                    if (!isPassword) {
-                        console.error("❌ Incorrect password");
-                        throw new Error('Incorrect password');
+                    const isValid = await bcrypt.compare(credentials?.password || "", user.password);
+                    if (!isValid) {
+                        throw new Error("Invalid password");
                     }
-            
-                    return user;
-            
-                } catch (error) {
-                    console.error("❌ Authorization Error:", error);
-                    throw new Error('Invalid credentials');
+                    return user as unknown as User;
+                } catch (e) {
+                    console.error(e);
+                    throw new Error("Something went wrong");
                 }
             }
-            
         })
     ],
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token._id = user._id?.toString();
+                token._id = user._id;
                 token.isVerified = user.isVerified;
                 token.isAcceptingMessages = user.isAcceptingMessages;
                 token.username = user.username;
             }
+            // console.log("token-",token);
             return token;
         },
         async session({ session, token }) {
@@ -76,14 +59,15 @@ export const authOptions: NextAuthOptions = {
                 session.user.isAcceptingMessages = token.isAcceptingMessages;
                 session.user.username = token.username;
             }
+            // console.log("session",session);
             return session;
         },
     },
     pages: {
-        signIn: "/sign-in"
+        signIn: "/sign-in", 
     },
     session: {
-        strategy: "jwt"
+        strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.SECRET,
 };
