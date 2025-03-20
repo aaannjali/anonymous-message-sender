@@ -28,7 +28,7 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col bg-gradient-to-br from-black via-gray-900 to-purple-800 text-white"
+      className="min-h-screen flex flex-col bg-gradient-to-br from-black via-gray-700 to-purple-400 text-white"
     >
 
       {/* Main content */}
@@ -51,8 +51,8 @@ export default function Home() {
             className="mt-8"
           >
             <Link href="/sign-up">
-              <Button className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full text-lg transition duration-300 ease-in-out transform hover:shadow-lg">
-                Get Started <ChevronRight className="ml-2" />
+              <Button className="bg-white hover:bg-gray-200 text-black px-8 py-3 rounded-full text-lg transition duration-300 ease-in-out transform hover:shadow-lg">
+                 Get Started <ChevronRight className="ml-1" />
               </Button>
             </Link>
           </motion.div>
@@ -73,15 +73,15 @@ export default function Home() {
             <CarouselContent>
               {messages.map((message, index) => (
                 <CarouselItem key={index} className="p-4">
-                  <Card className="bg-gradient-to-br from-gray-900 via-purple-800 to-black border border-purple-700 shadow-2xl backdrop-blur-lg text-white p-6 rounded-xl transition-transform duration-300 ">
+                  <Card className="bg-white border-purple-700 shadow-2xl backdrop-blur-lg text-black p-6 rounded-xl transition-transform duration-300 ">
                     <CardHeader>
                       <CardTitle className="text-xl font-semibold">{message.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-4">
-                      <MessageSquare className="flex-shrink-0 text-white" />
+                      <MessageSquare className="flex-shrink-0 text-black" />
                       <div>
-                        <p className="text-purple-200">{message.content}</p>
-                        <p className="text-xs text-purple-100 mt-2">
+                        <p className="text-black">{message.content}</p>
+                        <p className="text-xs text-black font-bold mt-2">
                           {message.received}
                         </p>
                       </div>
@@ -90,8 +90,8 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="text-purple-700" />
-            <CarouselNext className="text-purple-700 " />
+            <CarouselPrevious className="text-black" />
+            <CarouselNext className="text-black" />
           </Carousel>
         </motion.div>
 
