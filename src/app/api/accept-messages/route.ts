@@ -3,13 +3,14 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { User } from "next-auth";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     await dbConnect()
     const session = await getServerSession(authOptions)
     const user: User = session?.user as User
     if(!session || !session.user) {
-        return Response.json({
+        return NextResponse.json({
             success: false,
             message: "Not Authenticated"
         }, { status: 401 })
@@ -19,12 +20,12 @@ export async function POST(request: Request) {
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(userId, {isAcceptingMessage: acceptMessages}, {new: true})
         if(!updatedUser) {
-            return Response.json({
+            return NextResponse.json({
                 success: false,
                 message: "Failed to update user status to accept messages"
             }, { status: 401 }) 
         }
-        return Response.json({
+        return NextResponse.json({
             success: true,
             message: "Message acceptance status updated successfully",
             updatedUser
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
     } catch (error) {
 
         console.log("Failed to update user status to accept messages", error);
-        return Response.json({
+        return NextResponse.json({
             success: false,
             message: "Failed to update user status to accept messages"
         }, { status: 500 }) 

@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import {User} from "next-auth"
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
         console.log(request);
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
         const _user: User = session?.user as User;
     
         if (!session || !_user) {
-            return Response.json(
+            return NextResponse.json(
                 { success: false, message: 'Not authenticated' },
                 { status: 401 }
             );
@@ -28,13 +29,13 @@ export async function GET(request: Request) {
             ]).exec();
     
             if (!user || user.length === 0) {
-                return Response.json(
+                return NextResponse.json(
                     { message: 'User not found', success: false },
                     { status: 404 }
                 );
             }
     
-            return Response.json(
+            return NextResponse.json(
                 { messages: user[0].messages },
                 {
                     status: 200,
@@ -42,7 +43,7 @@ export async function GET(request: Request) {
             );
         } catch (error) {
             console.error('An unexpected error occurred:', error);
-            return Response.json(
+            return NextResponse.json(
                 { message: 'Internal server error', success: false },
                 { status: 500 }
             );
