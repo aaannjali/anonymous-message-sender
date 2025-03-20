@@ -1,49 +1,40 @@
-import { NextResponse } from 'next/server';
-import UserModel from '@/model/User';
-import { getServerSession } from 'next-auth/next';
-import dbConnect from '@/lib/dbConnect';
-import { User } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/options';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import UserModel from "@/model/User";
+import { sendResponse } from "../../../../../utils/response";
+import { NextRequest } from "next/server";
 
-export async function DELETE(
-  request: Request,
-  context: { params: { messageid: string } }  // ✅ Use `context`
-) {
-  const messageId = context.params.messageid;  // ✅ Access `params` properly
-  await dbConnect();
-  
-  const session = await getServerSession(authOptions);
-  const _user: User = session?.user as User;
+export async function POST(request: NextRequest) {
+    try {
+        // Parse the JSON body from the request
+        const { id, messageId } = await request.json();
 
-  if (!session || !_user) {
-    return NextResponse.json(
-      { success: false, message: 'Not authenticated' },
-      { status: 401 }
-    );
-  }
+        if (!id || !messageId) {
+            return sendResponse(400, "Missing required fields.");
+        }
 
-  try {
-    const updateResult = await UserModel.updateOne(
-      { _id: _user._id },
-      { $pull: { messages: { _id: messageId } } }
-    );
+        // Find the user by ID
+        const user = await UserModel.findById(id);
+        if (!user) {
+            return sendResponse(404, "User not found.");
+        }
 
-    if (updateResult.modifiedCount === 0) {
-      return NextResponse.json(
-        { message: 'Message not found or already deleted', success: false },
-        { status: 404 }
-      );
+        // Find the message index by its ID
+        const messageIndex = user.messages.findIndex(
+            (msg) => (msg._id as any).toString() === messageId
+        );
+
+        if (messageIndex === -1) {
+            return sendResponse(404, "Message not found.");
+        }
+
+        // Remove the message from the user's messages
+        user.messages.splice(messageIndex, 1);
+        await user.save();
+
+        // Respond with a success message
+        return sendResponse(200, "Message deleted.");
+    } catch (error) {
+        console.error("Error deleting message:", error);
+        return sendResponse(500, "Failed to delete message.");
     }
-
-    return NextResponse.json(
-      { message: 'Message deleted', success: true },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error('Error deleting message:', error);
-    return NextResponse.json(
-      { message: 'Error deleting message', success: false },
-      { status: 500 }
-    );
-  }
 }
